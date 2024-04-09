@@ -1,0 +1,9 @@
+const accountAddress = '0xYourAddress';
+
+web3.eth.getBalance(accountAddress, (err, balance) => {
+  if (err) {
+    console.error('Error occurred:', err);
+  } else {
+    console.log('Account balance:', web3.utils.fromWei(balance, 'ether'), 'ETH');
+  }
+});
