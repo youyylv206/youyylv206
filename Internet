@@ -1,0 +1,31 @@
+use ic_agent::Agent;
+use ic_types::Principal;
+use candid::Encode;
+
+#[tokio::main]
+async fn main() {
+    // 创建 Internet Computer 客户端
+    let agent = Agent::builder()
+        .with_url("https://ic0.app")
+        .build()
+        .expect("Unable to create agent");
+
+    // 设置发送者账户
+    let sender_principal = Principal::from_text("YOUR_SENDER_PRINCIPAL").unwrap();
+
+    // 设置接收者账户
+    let recipient_principal = Principal::from_text("YOUR_RECIPIENT_PRINCIPAL").unwrap();
+
+    // 设置转账金额（以 Cycles 为单位）
+    let amount: u64 = 1000; // 1000 Cycles
+
+    // 构造转账调用
+    let transfer_args = (&sender_principal, &recipient_principal, amount).encode();
+
+    // 发起转账调用
+    let result = agent.update(&sender_principal, "transfer", transfer_args, Vec::new())
+        .await
+        .expect("Transfer failed");
+
+    println!("Transfer result: {:?}", result);
+}
