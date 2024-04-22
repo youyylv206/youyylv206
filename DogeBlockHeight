@@ -1,0 +1,47 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class DogeBlockHeight {
+
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://dogechain.info/api/v1/block/latest");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // Parse the JSON response to get the block height
+            String jsonResponse = response.toString();
+            int blockHeight = getBlockHeightFromJson(jsonResponse);
+            System.out.println("Doge Block Height: " + blockHeight);
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private static int getBlockHeightFromJson(String jsonResponse) {
+        // Parse the JSON response to extract the block height
+        // You can use a JSON parsing library like Gson or org.json to parse the JSON string
+        // Here is a simple manual parsing example
+        String blockHeightKey = "\"height\":";
+        int index = jsonResponse.indexOf(blockHeightKey);
+        if (index != -1) {
+            int startIndex = index + blockHeightKey.length();
+            int endIndex = jsonResponse.indexOf(",", startIndex);
+            String blockHeightStr = jsonResponse.substring(startIndex, endIndex);
+            return Integer.parseInt(blockHeightStr);
+        }
+        return -1;
+    }
+}
