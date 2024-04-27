@@ -1,0 +1,8 @@
+# 创建密钥对
+solana-keygen new --outfile mykeypair.json
+
+# 获取地址
+solana address --keypair mykeypair.json
+
+# 转账 Solana
+solana transfer --from mykeypair.json <destination_address> 0.1 --allow-unfunded-recipient
